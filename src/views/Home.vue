@@ -15,7 +15,7 @@
             </router-link>
             <details>
               <summary>Предпросмотр</summary>
-              <video width="400" height="300" controls="controls">
+              <video :poster="film.poster" width="400" height="300" controls="controls">
                 <source :src="film.url">
                 Видео недоступно по разрешению правообладателя.
               </video>
@@ -35,17 +35,29 @@ import firebase from 'firebase/app';
 import * as fb from 'firebase';
 import MyNavbar from '@/components/MyNavbar.vue';
 const vuefilms = [];
-var firebaseConfig = {
-  apiKey: "AIzaSyAs2iNICjyyGgXQvtRTtYt67712RCcFOVs",
-  authDomain: "listoffilms-8536f.firebaseapp.com",
-  databaseURL: "https://listoffilms-8536f-default-rtdb.firebaseio.com",
-  projectId: "listoffilms-8536f",
-  storageBucket: "listoffilms-8536f.appspot.com",
-  messagingSenderId: "595539552049",
-  appId: "1:595539552049:web:1ba327027936ede9ff3210"
-};
-firebase.initializeApp(firebaseConfig);
-let database = firebase.database()
+// let firebaseConfig = {
+//   apiKey: "AIzaSyAs2iNICjyyGgXQvtRTtYt67712RCcFOVs",
+//   authDomain: "listoffilms-8536f.firebaseapp.com",
+//   databaseURL: "https://listoffilms-8536f-default-rtdb.firebaseio.com",
+//   projectId: "listoffilms-8536f",
+//   storageBucket: "listoffilms-8536f.appspot.com",
+//   messagingSenderId: "595539552049",
+//   appId: "1:595539552049:web:1ba327027936ede9ff3210"
+// };
+// firebase.initializeApp(firebaseConfig);
+
+var myFirebaseConfig = {
+    apiKey: "AIzaSyAhI25hD5Yv1eHaDsOEb6J7pAPFSCagSTQ",
+    authDomain: "vueusers-d7a7e.firebaseapp.com",
+    databaseURL: "https://vueusers-d7a7e-default-rtdb.firebaseio.com",
+    projectId: "vueusers-d7a7e",
+    storageBucket: "vueusers-d7a7e.appspot.com",
+    messagingSenderId: "222841222603",
+    appId: "1:222841222603:web:c935d47616057664b9724e"
+  };
+  // Initialize Firebase
+firebase.initializeApp(myFirebaseConfig);
+var database = firebase.database()
 export default {
   name: 'Home',
   components: {
@@ -61,6 +73,9 @@ export default {
         this.vuefilms.push(myfilm)
       })
     });
+  },
+  beforeDestroy(){
+    this.vuefilms = []
   }
 }
 </script>

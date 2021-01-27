@@ -2,13 +2,14 @@
   <div class="film">
     <MyNavbar />
     <div class="mycenter">
-      <video width="400" height="300" controls="controls">
+      <video :poster="film.poster" width="400" height="300" controls="controls">
         <source :src="$route.query.url">
         Видео недоступно по разрешению правообладателя.
       </video>
     </div>
   </div>
 </template>
+
 <script>
 import MyNavbar from '@/components/MyNavbar.vue';
 export default {
