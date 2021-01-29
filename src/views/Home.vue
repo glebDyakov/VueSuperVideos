@@ -1,16 +1,27 @@
 <template>
   <div class="home">
     <MyNavbar/>
+<div class="backgroundSite">
+</div>
     <div class="myfilms">
-        <div class="card" style="" :key="film" v-for="film of vuefilms">
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Самое просматриваемое видео:
+            </button>
+          </h2>
+        </div>
+      </div>
+      <div class="card" style="" v-for="film of vuefilms" v-if="Math.max(...vueViewsFilms) === film.views">
           <div class="card-body">
-            <h5 class="card-title">Название фильма: {{ film.name }}</h5>
+            <h5 class="card-title" @click="write()">Название фильма: {{ film.name }}</h5>
             <h5 class="card-title">Режиссёр: {{ film.director }}</h5>
             <h5 class="card-title">Дата: {{ film.date }}</h5>
             <h5 class="card-title">Просмотры: {{ film.views }}</h5>
             <h5 class="card-title">Популярность: {{ film.popularity }}</h5>
             <p class="card-text">Описание: {{ film.description }}.</p>
-            <router-link class="btn btn-primary" :to="{ path: '/detailoffilmw', query: { url: film.url }}">
+            <router-link class="btn btn-primary" :to="{ path: '/detailoffilmw', query: { url: film.url, author: film.author, name: film.name, views: film.views, poster: film.poster, filmKey: film.filmKey  }}">
               Play Video
             </router-link>
             <details>
@@ -23,6 +34,41 @@
               
           </div>
         </div>
+      <!-- <div>{{ Math.max(...vueViewsFilms) }}</div> -->
+      
+      
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Список всех опубликованных видео:
+            </button>
+          </h2>
+        </div>
+      </div>
+      <!-- :key="film" -->
+        <div class="card" style="" v-for="film of vuefilms">
+          <div class="card-body">
+            <h5 class="card-title" @click="write()">Название фильма: {{ film.name }}</h5>
+            <h5 class="card-title">Режиссёр: {{ film.director }}</h5>
+            <h5 class="card-title">Дата: {{ film.date }}</h5>
+            <h5 class="card-title">Просмотры: {{ film.views }}</h5>
+            <h5 class="card-title">Популярность: {{ film.popularity }}</h5>
+            <p class="card-text">Описание: {{ film.description }}.</p>
+            <router-link class="btn btn-primary" :to="{ path: '/detailoffilmw', query: { url: film.url, author: film.author, name: film.name, views: film.views, poster: film.poster, filmKey: film.filmKey  }}">
+              Play Video
+            </router-link>
+            <details>
+              <summary>Предпросмотр</summary>
+              <video :poster="film.poster" width="400" height="300" controls="controls">
+                <source :src="film.url">
+                Видео недоступно по разрешению правообладателя.
+              </video>
+            </details>
+              
+          </div>
+        </div>
+        <MyFooter/>
     </div>    
   </div>
 </template>
@@ -34,7 +80,10 @@
 import firebase from 'firebase/app';
 import * as fb from 'firebase';
 import MyNavbar from '@/components/MyNavbar.vue';
+import MyFooter from '@/components/MyFooter.vue';
+
 const vuefilms = [];
+var vuePopularfilm = [];
 // let firebaseConfig = {
 //   apiKey: "AIzaSyAs2iNICjyyGgXQvtRTtYt67712RCcFOVs",
 //   authDomain: "listoffilms-8536f.firebaseapp.com",
@@ -61,21 +110,71 @@ var database = firebase.database()
 export default {
   name: 'Home',
   components: {
-    MyNavbar
+    MyNavbar,
+    MyFooter
+  },
+  methods:{
+    write(){
+      console.log(this.vuePopularF)
+      console.log(this.vueViewsFilms)
+    }
   },
   data:()=>({
-    vuefilms
-  }),
+    vuefilms,
+    vuePopularF:'',
+    vueViewsFilms:[]
+}),
+  
+
+  // mounted(){
+  //   database.ref('/films').on('value', snapshot => {
+  //     snapshot.forEach(async (oneFilm) => {
+  //       let myfilm = await oneFilm.val();
+  //       this.vuefilms.push(myfilm)
+  //     })
+  //   });
+  // },
+  // надо использовать код выше а не ниже но так не загружаются все видео
   mounted(){
+    let cursorOfFilms = 0
     database.ref('/films').on('value', snapshot => {
       snapshot.forEach((oneFilm) => {
+        
         let myfilm = oneFilm.val();
+        // vuefilms[a++].push({"filmKey": oneFilm.key})
+
+        //let nameOfUserWhichPublishedThisVideo = oneFilm.val().aut
         this.vuefilms.push(myfilm)
+        this.vueViewsFilms.push(myfilm.views)
+        vuefilms[cursorOfFilms].filmKey = oneFilm.key
+        // console.log(vuefilms[cursorOfFilms])
+        cursorOfFilms++;
+        // if(cursorOfFilms < 3){
+        //   Number(vuefilms[cursorOfFilms].views) >= Number(vuefilms[cursorOfFilms + 1].views) ? vuePopularfilm = Number(vuefilms[cursorOfFilms]) : vuePopularfilm = vuePopularfilm;
+
+        // }
+        // console.log('vuePopularfilm', vuePopularfilm)
       })
     });
+    // this.vuePopularF = Math.max(this.vuefilms[0].views)
+    vuefilms.forEach((film, index) => {
+      if(index <  vuefilms.length - 1){
+        //vuePopularfilm = film
+        // return Number(film.views) > Number(vuefilms[index + 1].views)
+        //console.log(vuePopularfilm)
+        // let vuePopularfilms = Math.max(vuefilms[index].views, vuefilms[index + 1].views)
+        
+      }
+      
+    })
+    
+    
   },
   beforeDestroy(){
     this.vuefilms = []
   }
 }
 </script>
+<style scoped>
+  
+</style>

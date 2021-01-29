@@ -3,27 +3,31 @@
     <MyNavbar />
     
     <form @submit.prevent class="form-signin text-center">
-      <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      <label for="inputEmail" class="sr-only">Email address</label>
+      <img class="mb-4" src="https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/vue-dot-js-256.png" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Зарегестрируйтесь</h1>
+      <label for="inputEmail" class="sr-only">Photo</label>
+      <input v-model="photo" type="text" id="inputEmail" class="form-control" placeholder="Photo" required="" autofocus="">
+      <label for="inputEmail" class="sr-only">Email</label>
       <input v-model="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
       <label for="inputPassword" class="sr-only">Password</label>
       <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-      <label for="inputEmail" class="sr-only">gender</label>
-      <input v-model="gender" type="text" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-      <label for="inputEmail" class="sr-only">hobby</label>
-      <input v-model="hobby" type="text" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-      <label for="inputEmail" class="sr-only">id</label>
-      <input v-model="id" type="number" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-      <label for="inputEmail" class="sr-only">name</label>
-      <input v-model="name" type="text" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-      <label for="inputEmail" class="sr-only">age</label>
-      <input v-model="age" type="number" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+      <label for="inputEmail" class="sr-only">Gender</label>
+      <input v-model="gender" type="text" id="inputEmail" class="form-control" placeholder="Gender" required="" autofocus="">
+      <label for="inputEmail" class="sr-only">Hobby</label>
+      <input v-model="hobby" type="text" id="inputEmail" class="form-control" placeholder="Hobby" required="" autofocus="">
+      <!--
+      <label for="inputEmail" class="sr-only">Id</label>
+      <input v-model="id" type="number" id="inputEmail" class="form-control" placeholder="Id" required="" autofocus="">
+      -->
+      <label for="inputEmail" class="sr-only">Name</label>
+      <input v-model="name" type="text" id="inputEmail" class="form-control" placeholder="Name" required="" autofocus="">
+      <label for="inputEmail" class="sr-only">Age</label>
+      <input v-model="age" type="number" id="inputEmail" class="form-control" placeholder="Age" required="" autofocus="">
       <div class="checkbox mb-3">
       </div>
-      <button class="btn btn-lg btn-primary btn-block" @click="addNewUser()">Sign in</button>
+      <button class="btn btn-lg btn-primary btn-block" @click="addNewUser()">Зарегестрироваться</button>
       
-      <p class="mt-5 mb-3 text-muted">© 2017-2018</p> 
+      <MyFooter/>
 
     </form>
 
@@ -35,6 +39,7 @@
 <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 <script>
 import MyNavbar from '@/components/MyNavbar.vue';
+import MyFooter from '@/components/MyFooter.vue';
 import firebase from 'firebase/app';
 import * as fb from 'firebase';
 
@@ -44,10 +49,12 @@ let database = firebase.database()
 export default {
   name: 'RegisterNewUser',
   components: {
-    MyNavbar
+    MyNavbar,
+    MyFooter
   },
   data:()=>({
     countOfUsers:0,
+    photo:'https://pbs.twimg.com/media/EcZzOJbXgAEpndc.jpg',
     name:'',
     email:'',
     password:'',
@@ -62,6 +69,7 @@ export default {
       this.userId = this.countOfUsers
       console.log('register')
       database.ref(`/users/${'user' + this.name}`).set({
+        photo:this.photo,
         name:this.name,
         email:this.email,
         password:this.password,

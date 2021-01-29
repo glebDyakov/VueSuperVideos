@@ -10,7 +10,17 @@
           <ul class="navbar-nav">
             <li class="nav-item">
               <router-link class="nav-link active" aria-current="page" to="/">
-              Домой
+                Домой
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link active" aria-current="page" to="/register">
+                Зарегестрироваться
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link active" aria-current="page" to="/user">
+                Войти
               </router-link>
             </li>
           </ul>
