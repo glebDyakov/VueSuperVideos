@@ -66,6 +66,7 @@ export default {
   }),
   methods:{
     addNewUser(){
+      M.toast({html: 'Новый пользователь зарегестрирован!'})
       this.userId = this.countOfUsers
       console.log('register')
       database.ref(`/users/${'user' + this.name}`).set({

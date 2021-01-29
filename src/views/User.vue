@@ -149,6 +149,7 @@ export default {
   }),
   methods:{
     addNewVideoToMyVideos(){
+      M.toast({html: 'Новое видео добавлено!'})
       console.log('added video')
       // ref.on('child_added', function(childSnapshot, prevChildKey) {
       //   childSnapshot
