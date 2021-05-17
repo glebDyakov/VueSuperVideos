@@ -24,11 +24,8 @@ export default {
   components: {
     MyNavbar
   },
-  
   mounted(){
       let database = firebase.database()
-      console.log('register')
-      console.log(`${this.$route.query.views}`)
       database.ref(`/films/${this.$route.query.filmKey}/`).update({
         views:Number(this.$route.query.views) + 1
       })

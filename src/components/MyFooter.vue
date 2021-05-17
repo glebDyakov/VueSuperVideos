@@ -4,9 +4,6 @@
 
 <script>
 export default {
-  name: 'MyFooter',
-  props: {
-      
-  }
+  name: 'MyFooter'
 }
 </script>

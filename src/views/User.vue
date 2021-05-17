@@ -3,7 +3,6 @@
     <MyNavbar />
     
     <form @submit.prevent class="form-signin text-center" v-if="auth === false">
-      <!--  || window.localStorage.getItem('auth') !== 'true' -->
       <img class="mb-4" src="https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/vue-dot-js-256.png" alt="" width="72" height="72">
       <h1 class="h3 mb-3 font-weight-normal">Войдите</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
@@ -28,14 +27,6 @@
     <div v-else>
       <img width="100px" height="100px" :src="photo" /><br/>
       {{ email }}
-      <!--
-      <div class="mycenter">
-        <video width="400" height="300" controls="controls">
-          <source :src="vueFilmsOfThisUser[0]">
-          Видео недоступно по разрешению правообладателя.
-        </video>
-      </div>
-      -->
       <div class="card" style="" :key="film" v-for="film of vueFilmsOfThisUser">
           <div class="card-body">
             <h5 class="card-title">Название фильма: {{ film.name }}</h5>
@@ -58,8 +49,6 @@
           </div>
 
         </div>
-
-        <!-- <form @submit.prevent class="form-signin text-center" v-if="auth === false">  -->
       <label for="inputEmail" class="sr-only">oneFilm</label>
       <input v-model="oneFilm" type="text" id="inputEmail" class="form-control" placeholder="FilmRecordName" required="" autofocus="">
       <label for="inputEmail" class="sr-only">Author</label>
@@ -83,14 +72,6 @@
       <div class="d-grid gap-2">
         <button @click="addNewVideoToMyVideos()" class="btn btn-primary" type="button">Add new video to my videos</button>
       </div>
-<!--       
-      <p class="mt-5 mb-3 text-muted">© 2017-2018</p> 
-
-    </form> -->
-
-      <!--
-      {{ vueFilmsOfThisUser }}
-      -->
     </div>
   </div>
 </template>
@@ -99,116 +80,87 @@
 <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 <script>
-import MyNavbar from '@/components/MyNavbar.vue';
-import MyFooter from '@/components/MyFooter.vue';
-import firebase from 'firebase/app';
-import * as fb from 'firebase';
-const vueFilmsOfThisUser = [];
-const vueusers = [];
-// let myFirebaseConfig = {
-//     apiKey: "AIzaSyAhI25hD5Yv1eHaDsOEb6J7pAPFSCagSTQ",
-//     authDomain: "vueusers-d7a7e.firebaseapp.com",
-//     databaseURL: "https://vueusers-d7a7e-default-rtdb.firebaseio.com",
-//     projectId: "vueusers-d7a7e",
-//     storageBucket: "vueusers-d7a7e.appspot.com",
-//     messagingSenderId: "222841222603",
-//     appId: "1:222841222603:web:c935d47616057664b9724e"
-//   };
-//   // Initialize Firebase
-// firebase.initializeApp(myFirebaseConfig);
-let database = firebase.database()
-
-export default {
-  name: 'User',
-  components: {
-    MyNavbar,
-    MyFooter
-  },
-  created(){
-    this.errorEmail = ' '
-    this.errorPassword = ' '
-  },
-  data:()=>({
-    vueusers,
-    vueFilmsOfThisUser,
-    email:'',
-    errorPassword:' ',
-    errorEmail:' ',
-    password:'',
-    auth : false,
-    date:0,
-    oneFilm:`${Math.random() * 10}`,
-    author:'',
-    description:'',
-    director:'',
-    name:'',
-    popularity:0,
-    poster:'',
-    url:'',
-    views:0,
-  }),
-  methods:{
-    addNewVideoToMyVideos(){
-      M.toast({html: 'Новое видео добавлено!'})
-      console.log('added video')
-      // ref.on('child_added', function(childSnapshot, prevChildKey) {
-      //   childSnapshot
-      // });
-      database.ref(`/films/${this.oneFilm}`).set({
-        author:this.author,
-        date:this.date,
-        description:this.description,
-        director:this.director,
-        name:this.name,
-        popularity:this.popularity,
-        poster:this.poster,
-        url:this.url,
-        views:this.views,
-      })
+  import MyNavbar from '@/components/MyNavbar.vue';
+  import MyFooter from '@/components/MyFooter.vue';
+  import firebase from 'firebase/app';
+  import * as fb from 'firebase';
+  const vueFilmsOfThisUser = [];
+  const vueusers = []
+  let database = firebase.database()
+  export default {
+    name: 'User',
+    components: {
+      MyNavbar,
+      MyFooter
     },
-    authenticate(){
-      database.ref('/users').on('value', snapshot => {
-      snapshot.forEach((oneUser) => {
-        // let myUser = oneUser.val()
-        // this.vueusers.push(myUser)
-        // console.log(oneUser.val())
-        this.email == oneUser.val().email && this.password == oneUser.val().password ? this.auth = true : false;
-        if(this.email == oneUser.val().email && this.password == oneUser.val().password){
-          window.localStorage.setItem("auth", "true");
-          console.log(`Login ${oneUser.val().name}`)
-          this.photo = oneUser.val().photo;
-          //ниже правильно но не работает
-          this.author = oneUser.val().name
-          database.ref('/films').on('value', filmlist => {
-            filmlist.forEach((oneFilm) => {
-              console.log(myfilm)
-              let myfilm = oneFilm.val();
-              if(myfilm.author === oneUser.val().name){
-                this.vueFilmsOfThisUser.push(myfilm)
+    created(){
+      this.errorEmail = ' '
+      this.errorPassword = ' '
+    },
+    data:()=>({
+      vueusers,
+      vueFilmsOfThisUser,
+      email:'',
+      errorPassword:' ',
+      errorEmail:' ',
+      password:'',
+      auth : false,
+      date:0,
+      oneFilm:`${Math.random() * 10}`,
+      author:'',
+      description:'',
+      director:'',
+      name:'',
+      popularity:0,
+      poster:'',
+      url:'',
+      views:0,
+    }),
+    methods:{
+      addNewVideoToMyVideos(){
+        M.toast({html: 'Новое видео добавлено!'})
+        database.ref(`/films/${this.oneFilm}`).set({
+          author:this.author,
+          date:this.date,
+          description:this.description,
+          director:this.director,
+          name:this.name,
+          popularity:this.popularity,
+          poster:this.poster,
+          url:this.url,
+          views:this.views,
+        })
+      },
+      authenticate(){
+        database.ref('/users').on('value', snapshot => {
+        snapshot.forEach((oneUser) => {
+          this.email == oneUser.val().email && this.password == oneUser.val().password ? this.auth = true : false;
+          if(this.email == oneUser.val().email && this.password == oneUser.val().password){
+            window.localStorage.setItem("auth", "true");
+            this.photo = oneUser.val().photo;
+            
+            this.author = oneUser.val().name
+            database.ref('/films').on('value', filmlist => {
+              filmlist.forEach((oneFilm) => {
+                let myfilm = oneFilm.val();
+                if(myfilm.author === oneUser.val().name){
+                  this.vueFilmsOfThisUser.push(myfilm)
+                }
+                
+              })
+              this.vueFilmsOfThisUser
+            });
+          } else if(this.email != oneUser.val().email || this.password != oneUser.val().password){
+              this.errorMail = 'Введён неправильный email.'
+              if(this.password != oneUser.val().password){
+                this.errorPassword = 'Введён неправильный пароль.'
               }
-              
-            })
-            this.vueFilmsOfThisUser
-          });
-        } else if(this.email != oneUser.val().email || this.password != oneUser.val().password){
-            this.errorMail = 'Введён неправильный email.'
-            console.log('неправильно email', this.errorMail)
-            if(this.password != oneUser.val().password){
-              this.errorPassword = 'Введён неправильный пароль.'
-              console.log('неправильно пароль', this.errorPassword)
-            }
-        }
-        
-
-      })
-    });
-    console.log(this.vueFilmsOfThisUser)
+          }
+        })
+      });
+      }
     }
-  },
-  mounted(){
-
   }
-}
 </script>
 <style scoped>
 

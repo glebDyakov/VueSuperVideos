@@ -31,9 +31,6 @@
 
 <script>
 export default {
-  name: 'MyNavbar',
-  props: {
-      
-  }
+  name: 'MyNavbar'
 }
 </script>
